@@ -1,0 +1,25 @@
+{
+    "name": "sef/sef",
+    "type": "library",
+    "description": "SEF is a simple and extensible framework which handles the dependency injection and the routing.",
+    "keywords": [
+        "framework",
+        "simple",
+        "extensible",
+        "dependency injection",
+        "routing"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michael Lefrank",
+            "email": "michael.lefrank@gmx.de"
+        }
+    ],
+    "require": {
+        "php":  ">=5.4.0",
+        "symfony/http-foundation": "~2.6",
+        "php-di/php-di": "^5.0"
+    },
+    "minimum-stability": "stable"
+}
