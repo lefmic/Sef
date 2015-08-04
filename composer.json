@@ -27,10 +27,11 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "Sef\\": "src/",
-            "Sef\\Configuraion\\": "src/Configuration",
-            "Sef\\Bootstrap\\": "src/Bootstrap",
-            "Sef\\Router\\": "src/Router"
+            "Sef\\": "Sef/src",
+            "Sef\\Configuration\\": "Sef/src/Configuration",
+            "Sef\\Bootstrap\\": "Sef/src/Bootstrap",
+            "Sef\\Router\\": "Sef/src/Router",
+            "Mock\\Module\\Configuration\\": "Sef/tests/unit-tests/src/Configuration"
         }
     }
 }
