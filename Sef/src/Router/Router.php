@@ -108,13 +108,16 @@ class Router
     {
         $this->resolvePath();
         if (false === $this->resolveModule($configuration)) {
-            throw new \Exception('Module '.ucfirst($this->moduleString). ' not found!');
+            /**
+             * @var ConfigurationInterface $moduleConfiguration
+             */
+            $moduleConfiguration = new $configuration['Main']();
+        } else {
+            /**
+             * @var ConfigurationInterface $moduleConfiguration
+             */
+            $moduleConfiguration = new $configuration[ucfirst($this->moduleString)]();
         }
-
-        /**
-         * @var ConfigurationInterface $moduleConfiguration
-         */
-        $moduleConfiguration = new $configuration[ucfirst($this->moduleString)]();
         $this->moduleConfiguration = $moduleConfiguration->getConfiguration();
     }
 
@@ -134,10 +137,14 @@ class Router
      *
      * @param array $modulesArray
      * @return bool
+     * @throws \Exception
      */
     protected function resolveModule(array $modulesArray)
     {
         if (!array_key_exists(ucfirst($this->moduleString), $modulesArray)) {
+            if (!array_key_exists('Main', $modulesArray)) {
+                throw new \Exception('Missing fallback module \"Main\"');
+            }
             return false;
         }
         return true;

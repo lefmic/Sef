@@ -12,6 +12,10 @@ class RouterTest extends PHPUnit_Framework_TestCase
         'Forum' => 'Mock\Module\Configuration\ForumConfigurationMock',
     );
 
+    private $badModulesArray = array(
+        'Forum' => 'Mock\Module\Configuration\ForumConfigurationMock',
+    );
+
     public function setUp()
     {
         $_SERVER['HTTP_HOST'] = 'testhost.local';
@@ -83,27 +87,27 @@ class RouterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Sef\Router\Router::process
+     * @covers Sef\Router\Router::resolveModule
      * @expectedException Exception
      */
-    public function testProcessThrowsExceptionNoModuleGiven()
+    public function testResolveModuleThrowsExceptionNoFallbackModuleGiven()
     {
         $router = new RouterProxy();
         $router->setRequest(Request::createFromGlobals());
-        $router->process($this->modulesArray);
+        $router->process($this->badModulesArray);
     }
 
     /**
      * @covers Sef\Router\Router::process
-     * @expectedException Exception
      */
-    public function testProcessThrowsExceptionModuleNotFoundInConfiguration()
+    public function testProcessFallbackToMainConfiguration()
     {
         $_SERVER['REQUEST_URI'] = '/foo';
 
         $router = new RouterProxy();
         $router->setRequest(Request::createFromGlobals());
         $router->process($this->modulesArray);
+        $this->assertEquals(array('Controller' => 'MainController'), $router->getModuleConfiguration());
     }
 
     /**
@@ -117,7 +121,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $router->setRequest(Request::createFromGlobals());
         $router->process($this->modulesArray);
 
-        $this->assertEquals(array(), $router->getModuleConfiguration());
+        $this->assertEquals(array('Controller' => 'ForumController'), $router->getModuleConfiguration());
     }
 
 }

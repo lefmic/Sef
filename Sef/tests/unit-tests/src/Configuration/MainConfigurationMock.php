@@ -4,7 +4,7 @@ namespace Mock\Module\Configuration;
 
 use Sef\Configuration\ConfigurationInterface;
 
-class ForumConfigurationMock implements ConfigurationInterface
+class MainConfigurationMock implements ConfigurationInterface
 {
     /**
      * @return array
@@ -12,7 +12,7 @@ class ForumConfigurationMock implements ConfigurationInterface
     public function getConfiguration()
     {
         return array(
-            'Controller' => 'ForumController'
+            'Controller' => 'MainController'
         );
     }
 }
