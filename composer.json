@@ -31,7 +31,9 @@
             "Sef\\Configuration\\": "Sef/src/Configuration",
             "Sef\\Bootstrap\\": "Sef/src/Bootstrap",
             "Sef\\Router\\": "Sef/src/Router",
-            "Mock\\Module\\Configuration\\": "Sef/tests/unit-tests/src/Configuration"
+            "Sef\\Validator\\": "Sef/src/Validator",
+            "Mock\\Module\\Configuration\\": "Sef/tests/unit-tests/src/Configuration",
+            "Mock\\Module\\Controller\\": "Sef/tests/unit-tests/src/Controller"
         }
     }
 }

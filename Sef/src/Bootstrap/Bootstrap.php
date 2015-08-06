@@ -6,6 +6,7 @@ use DI\ContainerBuilder;
 use Sef\Configuration\ConfigurationInterface;
 use Sef\Controller\ControllerInterface;
 use Sef\Router\Router;
+use Sef\validator\ConfigurationValidator;
 use Symfony\Component\HttpFoundation\Request;
 
 class Bootstrap
@@ -28,19 +29,27 @@ class Bootstrap
     /**
      * set up all necessary variables for the module
      *
-     * @param ConfigurationInterface $configuration
+     * @param ConfigurationInterface $modulesConfiguration configuration that defines all modules
      */
-    public function setUp(ConfigurationInterface $configuration)
+    public function setUp(ConfigurationInterface $modulesConfiguration)
     {
+        $configurationValidator = new ConfigurationValidator();
         $router = new Router();
         $router->setRequest(Request::createFromGlobals());
-        $router->process($configuration->getConfiguration());
 
+        $configurationValidator->validateModulesConfiguration($modulesConfiguration->getConfiguration());
+        $router->resolvePath();
+        $router->setModules($modulesConfiguration->getConfiguration());
+        $router->resolveModule();
+        $configurationValidator->validateModuleConfiguration($router->getModuleConfiguration());
+        $router->process();
+        $configurationValidator->validateModuleConfiguration($router->getModuleConfiguration(), $router->getModuleIsFallback());
         $moduleConfiguration = $router->getModuleConfiguration();
-        $this->moduleDiContainer = $this->initDI($moduleConfiguration['di']);
         $this->controller = $moduleConfiguration['controller'];
-        // TODO: determine the method inside of the Router
-        $this->method = $moduleConfiguration['method'];
+        $this->method = $moduleConfiguration[$router->getMatchingRegexp()]['method'];
+
+        // TODO: merge di container from module and specific function
+        $this->moduleDiContainer = $this->initDI($moduleConfiguration['di']);
     }
 
     /**

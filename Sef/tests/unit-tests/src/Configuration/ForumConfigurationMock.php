@@ -12,7 +12,18 @@ class ForumConfigurationMock implements ConfigurationInterface
     public function getConfiguration()
     {
         return array(
-            'Controller' => 'ForumController'
+            'controller' => 'Mock\Module\Controller\MockController',
+            'dependencies' => array(),
+            'functions' => array(
+                '' => array(
+                    'method' => 'methodToCall',
+                    'dependencies' => array (),
+                ),
+            ),
+            'fallback' => array(
+                'module' => 'Mock\Module\Configuration\FallbackConfigurationMock',
+                'regexp' => ''
+            ),
         );
     }
 }

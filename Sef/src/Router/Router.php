@@ -10,10 +10,20 @@ class Router
     // @codeCoverageIgnoreStart
 
     /**
+     * @var array
+     */
+    private $modules;
+
+    /**
      * contains the module configuration
      * @var array $module
      */
     private $moduleConfiguration;
+
+    /**
+     * @var string
+     */
+    private $matchingRegexp;
 
     /**
      * @var Request $request
@@ -31,6 +41,27 @@ class Router
     private $pathString = null;
 
     /**
+     * @var bool
+     */
+    private $moduleIsFallback = false;
+
+    /**
+     * @param array $modules
+     */
+    public function setModules($modules)
+    {
+        $this->modules = $modules;
+    }
+
+    /**
+     * @return array
+     */
+    public function getModules()
+    {
+        return $this->modules;
+    }
+
+    /**
      * @param array $moduleConfiguration
      */
     public function setModuleConfiguration($moduleConfiguration)
@@ -44,6 +75,22 @@ class Router
     public function getModuleConfiguration()
     {
         return $this->moduleConfiguration;
+    }
+
+    /**
+     * @param string $matchingRegexp
+     */
+    public function setMatchingRegexp($matchingRegexp)
+    {
+        $this->matchingRegexp = $matchingRegexp;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMatchingRegexp()
+    {
+        return $this->matchingRegexp;
     }
 
     /**
@@ -94,37 +141,28 @@ class Router
         return $this->pathString;
     }
 
-    // @codeCoverageIgnoreEnd
+    /**
+     * @param boolean $moduleIsFallback
+     */
+    public function setModuleIsFallback($moduleIsFallback)
+    {
+        $this->moduleIsFallback = $moduleIsFallback;
+    }
 
     /**
-     * expects an array of modules
-     * key: module
-     * value: moduleConfigurationNamespace
-     *
-     * @param array $configuration
-     * @throws \Exception
+     * @return boolean
      */
-    public function process(array $configuration)
+    public function getModuleIsFallback()
     {
-        $this->resolvePath();
-        if (false === $this->resolveModule($configuration)) {
-            /**
-             * @var ConfigurationInterface $moduleConfiguration
-             */
-            $moduleConfiguration = new $configuration['Main']();
-        } else {
-            /**
-             * @var ConfigurationInterface $moduleConfiguration
-             */
-            $moduleConfiguration = new $configuration[ucfirst($this->moduleString)]();
-        }
-        $this->moduleConfiguration = $moduleConfiguration->getConfiguration();
+        return $this->moduleIsFallback;
     }
+
+    // @codeCoverageIgnoreEnd
 
     /**
      * resolve the path and the module
      */
-    protected function resolvePath()
+    public function resolvePath()
     {
         $requestUri = trim($this->request->getRequestUri(), '/');
         $urlArr = explode('/', $requestUri, 2);
@@ -134,19 +172,58 @@ class Router
 
     /**
      * check whether the desired module exists in the configuration
+     */
+    public function resolveModule()
+    {
+        if (!array_key_exists(ucfirst($this->moduleString), $this->modules['modules'])) {
+            $moduleConf = $this->modules['fallback']['module'];
+        } else {
+            $moduleConf = $this->modules['modules'][ucfirst($this->moduleString)];
+        }
+        /**
+         * @var ConfigurationInterface $moduleConfiguration
+         */
+        $moduleConfiguration = new $moduleConf();
+        $this->moduleConfiguration = $moduleConfiguration->getConfiguration();
+    }
+
+    /**
+     * expects an array of modules
+     * key: module
+     * value: moduleConfigurationNamespace
      *
-     * @param array $modulesArray
-     * @return bool
      * @throws \Exception
      */
-    protected function resolveModule(array $modulesArray)
+    public function process()
     {
-        if (!array_key_exists(ucfirst($this->moduleString), $modulesArray)) {
-            if (!array_key_exists('Main', $modulesArray)) {
-                throw new \Exception('Missing fallback module \"Main\"');
-            }
-            return false;
+        $regexp = $this->resolveRegExp($this->moduleConfiguration);
+        if (false === $regexp) {
+            $moduleConf = $this->moduleConfiguration['fallback']['module'];
+            $this->matchingRegexp = $this->moduleConfiguration['fallback']['regexp'];
+            /**
+             * @var ConfigurationInterface $moduleConfiguration
+             */
+            $moduleConfiguration = new $moduleConf();
+            $this->moduleConfiguration = $moduleConfiguration->getConfiguration();
+            $this->moduleIsFallback = true;
+        } else {
+            $this->matchingRegexp = $regexp;
         }
-        return true;
+    }
+
+    /**
+     * find a matching regex for the path in the given configuration or return false
+     *
+     * @param array $moduleConfiguration
+     * @return bool|array
+     */
+    protected function resolveRegExp(array $moduleConfiguration)
+    {
+        foreach ($moduleConfiguration['functions'] as $regexp => $value) {
+            if (preg_match('#^'.$regexp.'$#', $this->pathString)) {
+                return $regexp;
+            }
+        }
+        return false;
     }
 }
