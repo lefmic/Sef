@@ -46,9 +46,9 @@ class Bootstrap
         $configurationValidator->validateModuleConfiguration($router->getModuleConfiguration(), $router->getModuleIsFallback());
         $moduleConfiguration = $router->getModuleConfiguration();
         $this->controller = $moduleConfiguration['controller'];
-        $this->method = $moduleConfiguration[$router->getMatchingRegexp()]['method'];
+        $this->method = $moduleConfiguration['functions'][$router->getMatchingRegexp()]['method'];
 
-        $diArr = $this->mergeDi($moduleConfiguration['dependencies'], $modulesConfiguration['functions'][$router->getMatchingRegexp()]['dependencies']);
+        $diArr = $this->mergeDi($moduleConfiguration['dependencies'], $moduleConfiguration['functions'][$router->getMatchingRegexp()]['dependencies']);
         $this->moduleDiContainer = $this->initDI($diArr);
     }
 
