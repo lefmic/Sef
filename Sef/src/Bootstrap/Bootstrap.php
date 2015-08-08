@@ -48,8 +48,8 @@ class Bootstrap
         $this->controller = $moduleConfiguration['controller'];
         $this->method = $moduleConfiguration[$router->getMatchingRegexp()]['method'];
 
-        // TODO: merge di container from module and specific function
-        $this->moduleDiContainer = $this->initDI($moduleConfiguration['di']);
+        $diArr = $this->mergeDi($moduleConfiguration['dependencies'], $modulesConfiguration['functions'][$router->getMatchingRegexp()]['dependencies']);
+        $this->moduleDiContainer = $this->initDI($diArr);
     }
 
     /**
@@ -77,5 +77,17 @@ class Bootstrap
         $builder = new ContainerBuilder();
         $builder->addDefinitions($configuration);
         return $builder->build();
+    }
+
+    /**
+     * merge both configurations
+     *
+     * @param array $moduleDi
+     * @param array $functionDi
+     * @return array
+     */
+    private function mergeDi(array $moduleDi, array $functionDi)
+    {
+        return array_merge($moduleDi, $functionDi);
     }
 }
