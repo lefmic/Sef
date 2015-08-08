@@ -6,7 +6,7 @@ use DI\ContainerBuilder;
 use Sef\Configuration\ConfigurationInterface;
 use Sef\Controller\ControllerInterface;
 use Sef\Router\Router;
-use Sef\validator\ConfigurationValidator;
+use Sef\Validator\ConfigurationValidator;
 use Symfony\Component\HttpFoundation\Request;
 
 class Bootstrap

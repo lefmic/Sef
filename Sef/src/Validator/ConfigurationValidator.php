@@ -1,6 +1,6 @@
 <?php
 
-namespace Sef\validator;
+namespace Sef\Validator;
 
 class ConfigurationValidator
 {
