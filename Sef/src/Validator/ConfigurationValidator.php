@@ -26,18 +26,23 @@ class ConfigurationValidator
      * validate the explicit module configuration
      *
      * @param array $configuration
-     * @param bool $fallback
+     * @param null $regexp
+     * @param bool|false $fallback
      * @throws \Exception
      */
-    public function validateModuleConfiguration(array $configuration, $fallback = false)
+    public function validateModuleConfiguration(array $configuration, $regexp = null, $fallback = false)
     {
-        if (!array_key_exists('controller', $configuration) || empty($configuration['controller'])) {
+        if (
+            null !== $regexp &&
+            (!array_key_exists('Controller', $configuration['functions'][$regexp]['dependencies']) ||
+                empty($configuration['functions'][$regexp]['dependencies']['Controller']))
+        ) {
             throw new \Exception('No Controller defined');
         }
         if (
-            (false !== $fallback) &&
+            (false === $fallback) &&
             (!array_key_exists('fallback', $configuration) ||
-            empty($configuration['fallback']))) {
+                empty($configuration['fallback']))) {
             throw new \Exception('No Fallback defined');
         }
         // @codeCoverageIgnoreStart

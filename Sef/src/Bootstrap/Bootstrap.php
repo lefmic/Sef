@@ -17,11 +17,6 @@ class Bootstrap
     private $moduleDiContainer;
 
     /**
-     * @var ControllerInterface $controller
-     */
-    private $controller;
-
-    /**
      * @var $method
      */
     private $method;
@@ -43,9 +38,12 @@ class Bootstrap
         $router->resolveModule();
         $configurationValidator->validateModuleConfiguration($router->getModuleConfiguration());
         $router->process();
-        $configurationValidator->validateModuleConfiguration($router->getModuleConfiguration(), $router->getModuleIsFallback());
+        $configurationValidator->validateModuleConfiguration(
+            $router->getModuleConfiguration(),
+            $router->getMatchingRegexp(),
+            $router->getModuleIsFallback()
+        );
         $moduleConfiguration = $router->getModuleConfiguration();
-        $this->controller = $moduleConfiguration['controller'];
         $this->method = $moduleConfiguration['functions'][$router->getMatchingRegexp()]['method'];
 
         $diArr = $this->mergeDi($moduleConfiguration['dependencies'], $moduleConfiguration['functions'][$router->getMatchingRegexp()]['dependencies']);
@@ -60,7 +58,7 @@ class Bootstrap
         /**
          * @var ControllerInterface $controller
          */
-        $controller = new $this->controller;
+        $controller = $this->moduleDiContainer->get('Controller');
         $controller->setDic($this->moduleDiContainer);
         $method = $this->method;
         $controller->$method();
@@ -88,6 +86,6 @@ class Bootstrap
      */
     private function mergeDi(array $moduleDi, array $functionDi)
     {
-        return array_merge($moduleDi, $functionDi);
+        return array_merge_recursive($moduleDi, $functionDi);
     }
 }

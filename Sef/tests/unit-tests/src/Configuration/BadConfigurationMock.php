@@ -32,8 +32,9 @@ class BadConfigurationMock implements ConfigurationInterface
     public function getConfigurationEmptyController()
     {
         return array(
-            'controller' => '',
-            'dependencies' => array(),
+            'dependencies' => array(
+                'Controller' => '',
+            ),
             'functions' => array(
                 'regexp\/for\/the\/path\/?' => array(
                     'method' => 'methodToCall',
@@ -53,8 +54,9 @@ class BadConfigurationMock implements ConfigurationInterface
     public function getConfigurationNoFallback()
     {
         return array(
-            'controller' => 'namespace\to\main\controller',
-            'dependencies' => array(),
+            'dependencies' => array(
+                'Controller' => \DI\object('namespace\to\main\controller')->lazy(),
+            ),
             'functions' => array(
                 'regexp\/for\/the\/path\/?' => array(
                     'method' => 'methodToCall',
@@ -70,8 +72,9 @@ class BadConfigurationMock implements ConfigurationInterface
     public function getConfigurationEmptyFallback()
     {
         return array(
-            'controller' => 'namespace\to\main\controller',
-            'dependencies' => array(),
+            'dependencies' => array(
+                'Controller' => \DI\object('namespace\to\main\controller')->lazy(),
+            ),
             'functions' => array(
                 'regexp\/for\/the\/path\/?' => array(
                     'method' => 'methodToCall',
@@ -87,6 +90,6 @@ class BadConfigurationMock implements ConfigurationInterface
      */
     public function getConfiguration()
     {
-        // TODO: Do Nothing this is a bad configuration
+        // TODO: Do nothing this is a bad configuration
     }
 }

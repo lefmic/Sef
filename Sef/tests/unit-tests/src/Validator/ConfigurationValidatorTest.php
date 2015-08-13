@@ -58,7 +58,7 @@ class ConfigurationValidatorTest extends PHPUnit_Framework_TestCase
     {
         $mockConf = new BadConfigurationMock();
         $validator = new ConfigurationValidator();
-        $validator->validateModuleConfiguration($mockConf->getConfigurationNoController());
+        $validator->validateModuleConfiguration($mockConf->getConfigurationNoController(), 'regexp\/for\/the\/path\/?');
     }
 
     /**
@@ -69,7 +69,7 @@ class ConfigurationValidatorTest extends PHPUnit_Framework_TestCase
     {
         $mockConf = new BadConfigurationMock();
         $validator = new ConfigurationValidator();
-        $validator->validateModuleConfiguration($mockConf->getConfigurationEmptyController());
+        $validator->validateModuleConfiguration($mockConf->getConfigurationEmptyController(), 'regexp\/for\/the\/path\/?');
     }
 
     /**
@@ -80,7 +80,7 @@ class ConfigurationValidatorTest extends PHPUnit_Framework_TestCase
     {
         $mockConf = new BadConfigurationMock();
         $validator = new ConfigurationValidator();
-        $validator->validateModuleConfiguration($mockConf->getConfigurationNoFallback(), true);
+        $validator->validateModuleConfiguration($mockConf->getConfigurationNoFallback(), 'regexp\/for\/the\/path\/?', false);
     }
 
     /**
@@ -91,6 +91,6 @@ class ConfigurationValidatorTest extends PHPUnit_Framework_TestCase
     {
         $mockConf = new BadConfigurationMock();
         $validator = new ConfigurationValidator();
-        $validator->validateModuleConfiguration($mockConf->getConfigurationEmptyFallback(), true);
+        $validator->validateModuleConfiguration($mockConf->getConfigurationEmptyFallback(), 'regexp\/for\/the\/path\/?', false);
     }
 }
