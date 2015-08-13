@@ -30,7 +30,7 @@ class ConfigurationValidator
      * @param bool|false $fallback
      * @throws \Exception
      */
-    public function validateModuleConfiguration(array $configuration, $regexp = null, $fallback = false)
+    public function validateModuleConfiguration(array $configuration, $fallback = false, $regexp = null)
     {
         if (
             null !== $regexp &&

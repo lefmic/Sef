@@ -36,12 +36,15 @@ class Bootstrap
         $router->resolvePath();
         $router->setModules($modulesConfiguration->getConfiguration());
         $router->resolveModule();
-        $configurationValidator->validateModuleConfiguration($router->getModuleConfiguration());
+        $configurationValidator->validateModuleConfiguration(
+            $router->getModuleConfiguration(),
+            $router->getModuleIsFallback()
+        );
         $router->process();
         $configurationValidator->validateModuleConfiguration(
             $router->getModuleConfiguration(),
-            $router->getMatchingRegexp(),
-            $router->getModuleIsFallback()
+            $router->getModuleIsFallback(),
+            $router->getMatchingRegexp()
         );
         $moduleConfiguration = $router->getModuleConfiguration();
         $this->method = $moduleConfiguration['functions'][$router->getMatchingRegexp()]['method'];

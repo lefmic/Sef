@@ -177,6 +177,7 @@ class Router
     {
         if (!array_key_exists(ucfirst($this->moduleString), $this->modules['modules'])) {
             $moduleConf = $this->modules['fallback']['module'];
+            $this->moduleIsFallback = true;
         } else {
             $moduleConf = $this->modules['modules'][ucfirst($this->moduleString)];
         }
