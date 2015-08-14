@@ -16,6 +16,10 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">Sef/src</directory>
+            <exclude>
+                <directory suffix=".php">Sef/src/Application.php</directory>
+                <directory suffix=".php">Sef/src/Bootstrap/Bootstrap.php</directory>
+            </exclude>
         </whitelist>
         <blacklist>
             <directory suffix=".php">vendor</directory>
