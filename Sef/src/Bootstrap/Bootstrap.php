@@ -73,7 +73,9 @@ class Bootstrap
          * @var ControllerInterface $controller
          */
         $controller = $this->moduleDiContainer->get('Controller');
-        $controller->setDic($this->moduleDiContainer);
+        if ($controller instanceof ControllerInterface) {
+            $controller->setDic($this->moduleDiContainer);
+        }
         $method = $this->method;
         $controller->$method();
     }
