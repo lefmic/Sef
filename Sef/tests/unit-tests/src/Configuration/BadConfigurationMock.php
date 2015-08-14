@@ -32,13 +32,13 @@ class BadConfigurationMock implements ConfigurationInterface
     public function getConfigurationEmptyController()
     {
         return array(
-            'dependencies' => array(
-                'Controller' => '',
-            ),
+            'dependencies' => array(),
             'functions' => array(
                 'regexp\/for\/the\/path\/?' => array(
                     'method' => 'methodToCall',
-                    'dependencies' => array (),
+                    'dependencies' => array (
+                        'Controller' => '',
+                    ),
                 ),
             ),
             'fallback' => array(
@@ -54,13 +54,13 @@ class BadConfigurationMock implements ConfigurationInterface
     public function getConfigurationNoFallback()
     {
         return array(
-            'dependencies' => array(
-                'Controller' => \DI\object('namespace\to\main\controller')->lazy(),
-            ),
+            'dependencies' => array(),
             'functions' => array(
                 'regexp\/for\/the\/path\/?' => array(
                     'method' => 'methodToCall',
-                    'dependencies' => array (),
+                    'dependencies' => array (
+                        'Controller' => \DI\object('namespace\to\main\controller')->lazy(),
+                    ),
                 ),
             ),
         );
@@ -72,13 +72,13 @@ class BadConfigurationMock implements ConfigurationInterface
     public function getConfigurationEmptyFallback()
     {
         return array(
-            'dependencies' => array(
-                'Controller' => \DI\object('namespace\to\main\controller')->lazy(),
-            ),
+            'dependencies' => array(),
             'functions' => array(
                 'regexp\/for\/the\/path\/?' => array(
                     'method' => 'methodToCall',
-                    'dependencies' => array (),
+                    'dependencies' => array (
+                        'Controller' => \DI\object('namespace\to\main\controller')->lazy(),
+                    ),
                 ),
             ),
             'fallback' => array(),
