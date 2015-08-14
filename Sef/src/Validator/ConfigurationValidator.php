@@ -2,6 +2,13 @@
 
 namespace Sef\Validator;
 
+/**
+ * Class ConfigurationValidator
+ *
+ * Validate the given configurations
+ *
+ * @package Sef\Validator
+ */
 class ConfigurationValidator
 {
     /**

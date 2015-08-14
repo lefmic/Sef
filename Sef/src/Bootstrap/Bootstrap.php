@@ -9,6 +9,13 @@ use Sef\Router\Router;
 use Sef\Validator\ConfigurationValidator;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class Bootstrap
+ *
+ * This class will start the processes for setting up the application
+ *
+ * @package Sef\Bootstrap
+ */
 class Bootstrap
 {
     /**
@@ -22,7 +29,7 @@ class Bootstrap
     private $method;
 
     /**
-     * set up all necessary variables for the module
+     * run processes for setting up the application
      *
      * @param ConfigurationInterface $modulesConfiguration configuration that defines all modules
      */
@@ -54,7 +61,11 @@ class Bootstrap
     }
 
     /**
-     * start the user application
+     * start the application
+     *
+     * Call the module controller and the appropriate method
+     *
+     * @throws \DI\NotFoundException
      */
     public function run()
     {
@@ -70,7 +81,7 @@ class Bootstrap
     /**
      * initialize the dependency injection container
      *
-     * @param array $configuration
+     * @param array $configuration the merged array of dependencies to inject
      * @return \DI\Container
      */
     protected function initDI(array $configuration)
@@ -81,7 +92,7 @@ class Bootstrap
     }
 
     /**
-     * merge both configurations
+     * merge the module specific di-configuration and the method specific di-configuration
      *
      * @param array $moduleDi
      * @param array $functionDi

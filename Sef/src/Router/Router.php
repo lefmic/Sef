@@ -5,6 +5,13 @@ namespace Sef\Router;
 use Sef\Configuration\ConfigurationInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class Router
+ *
+ * Determines the module and the matching regular expression for the path
+ *
+ * @package Sef\Router
+ */
 class Router
 {
     // @codeCoverageIgnoreStart
@@ -160,7 +167,7 @@ class Router
     // @codeCoverageIgnoreEnd
 
     /**
-     * resolve the path and the module
+     * resolve the given url path
      */
     public function resolvePath()
     {
@@ -172,6 +179,7 @@ class Router
 
     /**
      * check whether the desired module exists in the configuration
+     * and set the appropriate module configuration to use
      */
     public function resolveModule()
     {
@@ -189,9 +197,8 @@ class Router
     }
 
     /**
-     * expects an array of modules
-     * key: module
-     * value: moduleConfigurationNamespace
+     * determines whether to use the given module or a fallback
+     * depending on the match of the regular expression
      *
      * @throws \Exception
      */
@@ -213,10 +220,10 @@ class Router
     }
 
     /**
-     * find a matching regex for the path in the given configuration or return false
+     * find a matching regular expression for the path in the given configuration or return false
      *
      * @param array $moduleConfiguration
-     * @return bool|array
+     * @return false|array
      */
     protected function resolveRegExp(array $moduleConfiguration)
     {
