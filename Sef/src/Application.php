@@ -2,6 +2,7 @@
 
 namespace Sef;
 
+use DI\ContainerBuilder;
 use Sef\Bootstrap\Bootstrap;
 use Sef\Configuration\ConfigurationInterface;
 
@@ -19,10 +20,14 @@ class Application
      * Start the application
      *
      * @param ConfigurationInterface $configuration an instance of the configuration where the modules are defined
+     * @param ContainerBuilder|null $builder
      */
-    public function start(ConfigurationInterface $configuration)
+    public function start(ConfigurationInterface $configuration, ContainerBuilder $builder = null)
     {
         $bootstrap = new Bootstrap();
+        if (null !== $builder) {
+            $bootstrap->setBuilder($builder);
+        }
         $bootstrap->setUp($configuration);
         $bootstrap->run();
     }

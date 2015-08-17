@@ -129,3 +129,4 @@ That's it!
 
 -   This framework is using [symfony/HttpFoundation](https://github.com/symfony/HttpFoundation) to determine the path, nevertheless it is not injected in your application automatically.
 -   You will have to inject the Request object where you need using the configuration files
+-   If you need to configure your dependency injection container before setting up the injections, just create an instance of DI\ContainerBuilder, do whatever you need to do and pass the object to Sef\Application::start as the second parameter

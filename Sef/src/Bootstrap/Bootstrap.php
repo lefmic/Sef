@@ -29,6 +29,19 @@ class Bootstrap
     private $method;
 
     /**
+     * @var ContainerBuilder
+     */
+    private $builder = null;
+
+    /**
+     * @param ContainerBuilder $builder
+     */
+    public function setBuilder(ContainerBuilder $builder)
+    {
+        $this->builder = $builder;
+    }
+
+    /**
      * run processes for setting up the application
      *
      * @param ConfigurationInterface $modulesConfiguration configuration that defines all modules
@@ -88,7 +101,7 @@ class Bootstrap
      */
     protected function initDI(array $configuration)
     {
-        $builder = new ContainerBuilder();
+        $builder = (null !== $this->builder) ? $this->builder : new ContainerBuilder();
         $builder->addDefinitions($configuration);
         return $builder->build();
     }
