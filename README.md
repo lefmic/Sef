@@ -1,5 +1,5 @@
 
-# SEF - Sinmpe Extensible Framework #
+# SEF - Simple Extensible Framework #
 
 SEF is a simple and extensible micro-framework which uses [symfony/HttpFoundation](https://github.com/symfony/HttpFoundation)
 and [PHP-DI](https://github.com/PHP-DI/PHP-DI) to deliver you a starting point for your web application.
@@ -11,15 +11,22 @@ This framework defines only a few guidelines for the developer:
 *   The application is divided in modules
 *   The first slash-separated string of the url-path defines the module
 *   The rest of the path is needed to define which method of the module-controller to call
-*   These definitions must be defined in configuration files
+*   These definitions must be done in configuration files
 
 These are the steps for you to do if you want to use this framework:
 
 1.  Get the files using composer.
+
+
+    "require": {
+        "sef/sef/: "1.x.x"
+    }
+    
+    
 2.  Write configurations for your modules, their functions and the dependencies
 3.  Implement your business logic
 
-## Configure your application. ##
+## Configure your application ##
 
 You will basically need two configuration files.
 
@@ -48,11 +55,11 @@ You will basically need two configuration files.
 
 #### NOTE: ####
 
-*   This configuration must contain a modules array and a fallback array inside
-*   The modules array defines all possible modules
-*   The fallback will be executed if a module was not found (this is a perfect place for your error template, since it is the fallback itself it does not have to contain some further fallback functionality like explained for a common module below)
+*   This configuration must contain a modules-array and a fallback-array inside
+*   The modules-array defines all possible modules
+*   The fallback will be executed if a module was not found (this is a perfect place for your error-handling, since it is the fallback itself it does not have to contain some further fallback functionality like explained for a common module below)
 
-## Configure your modules. ##
+## Configure your modules ##
 
 ### Example of a module-configuration (the 2nd one): ###
 
@@ -79,8 +86,9 @@ You will basically need two configuration files.
                      ),
                      '' => array(
                         'method' => 'anotherMethod',
-                        'Controller' => DI\object('namespace\to\your\controller')->lazy(),
-                        'dependencies' => array()
+                        'dependencies' => array(
+                            'Controller' => DI\object('namespace\to\your\controller')->lazy(),
+                        )
                      )
                  ),
                  'fallback' => array(
@@ -108,7 +116,16 @@ This one looks a bit more complicated, but it is simple indeed:
 **Note:**
 
 -   **Make sure you define regular expressions as keys for the given functions.**
--   **Here is aa example of the URL-pattern the framework expects: www.example.com/moduleName/this/will/be/checked/in/the/regular/expressions**
+-   **Here is an example of the URL-pattern the framework expects: www.example.com/moduleName/this/will/be/checked/in/the/regular/expressions**
 
+## Start the application ##
 
+    $app = new Sef\Application();
+    $app->start(new MyAppConfiguration());
+    
+That's it!
 
+## Additional information ##
+
+-   This framework is using [symfony/HttpFoundation](https://github.com/symfony/HttpFoundation) to determine the path, nevertheless it is not injected in your application automatically.
+-   You will have to inject the Request object where you need using the configuration files
