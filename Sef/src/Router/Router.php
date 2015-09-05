@@ -171,7 +171,7 @@ class Router
      */
     public function resolvePath()
     {
-        $requestUri = trim($this->request->getRequestUri(), '/');
+        $requestUri = trim($this->request->getPathInfo(), '/');
         $urlArr = explode('/', $requestUri, 2);
         $this->moduleString = $urlArr[0];
         $this->pathString = isset($urlArr[1]) ? $urlArr[1] : null;
