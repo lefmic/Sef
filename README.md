@@ -17,12 +17,12 @@ These are the steps for you to do if you want to use this framework:
 
 1.  Get the files using composer.
 
-
-    "require": {
-        "sef/sef/: "1.x.x"
+```
+   "require": {
+        "sef/sef": "1.x.1"
     }
-    
-    
+```
+
 2.  Write configurations for your modules, their functions and the dependencies
 3.  Implement your business logic
 
@@ -130,3 +130,12 @@ That's it!
 -   This framework is using [symfony/HttpFoundation](https://github.com/symfony/HttpFoundation) to determine the path, nevertheless it is not injected in your application automatically.
 -   You will have to inject the Request object where you need using the configuration files
 -   If you need to configure your dependency injection container before setting up the injections, just create an instance of DI\ContainerBuilder, do whatever you need to do and pass the object to Sef\Application::start as the second parameter
+
+### .htaccess ###
+- I suggest you use a .htaccess that looks at least like this
+```
+    RewriteEngine on
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.+)$ index.php?uri-$1 [QSA,L]
+```
