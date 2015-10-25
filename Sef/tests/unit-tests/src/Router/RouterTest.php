@@ -65,7 +65,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $router = new Router();
         $modulesConf = new ModulesConfigurationMock();
         $forumConf = new ForumConfigurationMock();
-        $router->setModuleString('forum');
+        $router->setModuleString('Forum');
         $router->setModules($modulesConf->getConfiguration());
         $router->resolveModule();
         $this->assertEquals($forumConf->getConfiguration(), $router->getModuleConfiguration());
