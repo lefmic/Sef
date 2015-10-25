@@ -10,7 +10,7 @@ This framework defines only a few guidelines for the developer:
 
 *   The application is divided in modules
 *   The first slash-separated string of the url-path defines the module
-*   The rest of the path is needed to define which method of the module-controller to call
+*   The rest of the path is needed to define which method of the module controller to call
 *   These definitions must be done in configuration files
 
 These are the steps for you to do if you want to use this framework:
@@ -84,17 +84,16 @@ use the same structure. Therefore you will reference the method in the fallback 
         public function getConfiguration()
         {
             return array(
-                // The controller for your Fallback
-                'controller' => 'Module\ErrorController',
                 // Define some dependencies if you need
-                'dependencies' => array(),
+                'dependencies' => array(
+                    // The controller for your Fallback
+                    'Controller' => DI\object('Test\Module\ErrorController')->lazy()
+                ),
                 // Looks same line a regular module configuration, except the fallback array
                 'functions' => array(
                     '' => array(
                         'method' => 'runMain',
-                        'dependencies' => array(
-                            'Controller' => DI\object('Test\Module\ErrorController')->lazy()
-                        )
+                        'dependencies' => array()
                     ),
                 ),
             );
@@ -119,7 +118,12 @@ use the same structure. Therefore you will reference the method in the fallback 
             // An array MUST be returned here
             return array(
                 // Define dependencies if you want to
-                 'dependencies' => array(),
+                 'dependencies' => array(
+                    // This is the controller to use for the methods listed here.
+                    // You can also define a new controller for each method if you wish.
+                    // If you defined one controller here and another for some special method, then this controller will not be executed
+                    'Controller' => DI\object('namespace\to\your\controller')->lazy())
+                 ),
                  // Define functions that will be called in case the appropriate regular expression matches a given path
                  'functions' => array(
                      // Define the expression that will determine the called path
@@ -129,7 +133,8 @@ use the same structure. Therefore you will reference the method in the fallback 
                         // Specific dependencies for the method above
                         'dependencies' => array(
                             // This is the controller of the method defined above
-                            // This controller must be defined in every method, so the framework knows your controller 
+                            // This controller can either be defined in every method so you can define own dependencies every time
+                            // or you define the controller in the first level dependencies - its up to you
                             'Controller' => DI\object('namespace\to\your\controller')->lazy())
                      ),
                      '' => array(

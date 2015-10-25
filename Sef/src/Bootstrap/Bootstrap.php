@@ -61,16 +61,34 @@ class Bootstrap
             $router->getModuleIsFallback()
         );
         $router->process();
+        $moduleConfiguration = $this->resolveControllerDependency($router->getModuleConfiguration(), $router->getMatchingRegexp());
         $configurationValidator->validateModuleConfiguration(
-            $router->getModuleConfiguration(),
+            $moduleConfiguration,
             $router->getModuleIsFallback(),
             $router->getMatchingRegexp()
         );
-        $moduleConfiguration = $router->getModuleConfiguration();
         $this->method = $moduleConfiguration['functions'][$router->getMatchingRegexp()]['method'];
 
         $diArr = $this->mergeDi($moduleConfiguration['dependencies'], $moduleConfiguration['functions'][$router->getMatchingRegexp()]['dependencies']);
         $this->moduleDiContainer = $this->initDI($diArr);
+    }
+
+    /**
+     * Resolve the controller to use for the method
+     *
+     * @param array $configuration
+     * @param $regexp
+     * @return array
+     */
+    private function resolveControllerDependency(array $configuration, $regexp)
+    {
+        if (
+            array_key_exists('Controller', $configuration['dependencies']) &&
+            array_key_exists('Controller', $configuration['functions'][$regexp]['dependencies'])
+        ) {
+            unset($configuration['dependencies']['Controller']);
+        }
+        return $configuration;
     }
 
     /**

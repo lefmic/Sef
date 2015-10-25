@@ -40,19 +40,43 @@ class ConfigurationValidator
     public function validateModuleConfiguration(array $configuration, $fallback = false, $regexp = null)
     {
         if (
+            (false === $fallback) &&
+            (!array_key_exists('fallback', $configuration) ||
+                empty($configuration['fallback']))) {
+            throw new \Exception('No Fallback defined');
+        }
+        if (
             null !== $regexp &&
+            false === $this->validateControllerExistence($configuration) &&
             (!array_key_exists('Controller', $configuration['functions'][$regexp]['dependencies']) ||
                 empty($configuration['functions'][$regexp]['dependencies']['Controller']))
         ) {
             throw new \Exception('No Controller defined');
         }
         if (
-            (false === $fallback) &&
-            (!array_key_exists('fallback', $configuration) ||
-                empty($configuration['fallback']))) {
-            throw new \Exception('No Fallback defined');
+            null !== $regexp &&
+            true === $this->validateControllerExistence($configuration) &&
+            (!array_key_exists('Controller', $configuration['dependencies']) ||
+                empty($configuration['dependencies']['Controller']))
+        ) {
+            throw new \Exception('No Controller defined');
         }
+
         // @codeCoverageIgnoreStart
     }
     // @codeCoverageIgnoreEnd
+
+    /**
+     * validate the existence of a Controller as a dependency
+     *
+     * @param array $configuration
+     * @return bool
+     */
+    protected function validateControllerExistence(array $configuration)
+    {
+        if (!array_key_exists('Controller', $configuration['dependencies'])) {
+           return false;
+        }
+        return true;
+    }
 }

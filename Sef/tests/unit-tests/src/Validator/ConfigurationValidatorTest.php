@@ -76,6 +76,17 @@ class ConfigurationValidatorTest extends PHPUnit_Framework_TestCase
      * @covers \Sef\Validator\ConfigurationValidator::validateModuleConfiguration
      * @expectedException Exception
      */
+    public function testValidateModuleConfigurationThrowsExceptionOnEmptyControllerForAllFunctionsGiven()
+    {
+        $mockConf = new BadConfigurationMock();
+        $validator = new ConfigurationValidator();
+        $validator->validateModuleConfiguration($mockConf->getConfigurationEmptyControllerForAllFunctions(), false, 'regexp\/for\/the\/path\/?');
+    }
+
+    /**
+     * @covers \Sef\Validator\ConfigurationValidator::validateModuleConfiguration
+     * @expectedException Exception
+     */
     public function testValidateModuleConfigurationThrowsExceptionOnNoFallbackGiven()
     {
         $mockConf = new BadConfigurationMock();
@@ -92,5 +103,32 @@ class ConfigurationValidatorTest extends PHPUnit_Framework_TestCase
         $mockConf = new BadConfigurationMock();
         $validator = new ConfigurationValidator();
         $validator->validateModuleConfiguration($mockConf->getConfigurationEmptyFallback(), false, 'regexp\/for\/the\/path\/?');
+    }
+
+    /**
+     * @covers \Sef\Validator\ConfigurationValidator::validateControllerExistence
+     */
+    public function testValidateControllerExistenceReturnsTrue()
+    {
+        $conf = new \Mock\Module\Configuration\ForumConfigurationMock();
+        $validator = new ConfigurationValidatorProxy();
+        $result = $validator->validateControllerExistence($conf->getConfigurationWithControllerDefinedForAllFunctions());
+        $this->assertTrue($result);
+    }
+
+    public function testValidateControllerExistenceReturnsFalse()
+    {
+        $conf = new \Mock\Module\Configuration\ForumConfigurationMock();
+        $validator = new ConfigurationValidatorProxy();
+        $result = $validator->validateControllerExistence($conf->getConfiguration());
+        $this->assertFalse($result);
+    }
+}
+
+class ConfigurationValidatorProxy extends ConfigurationValidator
+{
+    public function validateControllerExistence(array $configuration)
+    {
+        return parent::validateControllerExistence($configuration);
     }
 }

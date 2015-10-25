@@ -51,6 +51,28 @@ class BadConfigurationMock implements ConfigurationInterface
     /**
      * @return array
      */
+    public function getConfigurationEmptyControllerForAllFunctions()
+    {
+        return array(
+            'dependencies' => array(
+                'Controller' => '',
+            ),
+            'functions' => array(
+                'regexp\/for\/the\/path\/?' => array(
+                    'method' => 'methodToCall',
+                    'dependencies' => array (),
+                ),
+            ),
+            'fallback' => array(
+                'module' => 'namespace\to\fallback\module\controller',
+                'regexp' => ''
+            ),
+        );
+    }
+
+    /**
+     * @return array
+     */
     public function getConfigurationNoFallback()
     {
         return array(

@@ -12,8 +12,9 @@ class MainConfigurationMock implements ConfigurationInterface
     public function getConfiguration()
     {
         return array(
-            'controller' => 'Mock\Module\Controller\MockController',
-            'dependencies' => array(),
+            'dependencies' => array(
+                'Controller' => 'Mock\Module\Controller\MockController',
+            ),
             'functions' => array(
                 'regexp\/for\/the\/path\/?' => array(
                     'method' => 'methodToCall',
