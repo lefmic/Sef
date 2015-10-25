@@ -183,11 +183,11 @@ class Router
      */
     public function resolveModule()
     {
-        if (!array_key_exists(ucfirst($this->moduleString), $this->modules['modules'])) {
+        if (!array_key_exists($this->moduleString, $this->modules['modules'])) {
             $moduleConf = $this->modules['fallback']['module'];
             $this->moduleIsFallback = true;
         } else {
-            $moduleConf = $this->modules['modules'][ucfirst($this->moduleString)];
+            $moduleConf = $this->modules['modules'][$this->moduleString];
         }
         /**
          * @var ConfigurationInterface $moduleConfiguration
